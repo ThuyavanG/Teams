@@ -1,0 +1,20 @@
+#$allTeams=import-csv "C:\Microsoft Teams\allTeams.csv"
+$allTeams = Get-Team
+$allTeamUsers = @()
+$properties=@{TeamsDisplayName='';User='';Name=''; Role=''};
+
+foreach ($team in $allTeams) {
+
+$teamUsers = get-teamuser -GroupId $team.GroupId
+
+    foreach ($user in $teamusers) {
+    $teamUser = New-Object -TypeName PSObject -Property $properties;
+    $teamUser.TeamsDisplayName = $team.DisplayName
+    $teamUser.User = $user.User
+    $teamUser.Name = $user.Name
+    $teamUser.Role = $user.Role    
+    $allTeamUsers+= $teamUser
+    }
+}
+
+$allTeamUsers | select TeamsDisplayName, User , Name, Role | Export-Csv -Path "C:\Microsoft Teams\allTeams.csv" -NoTypeInformation
